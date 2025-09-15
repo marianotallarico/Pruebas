@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slideshow Justificado</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6B4C3B;
+    text-align: center;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .background-slideshow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .background-slideshow .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;       /* llena todo el contenedor */
+    background-position: center;  /* centra la imagen */
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+  }
+
+  .background-slideshow .slide.active {
+    opacity: 0.6; /* transparencia */
+  }
+
+  .countdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(245, 222, 179, 0.2);
+    padding: 25px 35px;
+    border-radius: 25px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    z-index: 1;
+  }
+
+  .countdown {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+  .time-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .number {
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  .label {
+    font-size: 0.9em;
+  }
+</style>
+</head>
+<body>
+
+<div class="background-slideshow">
+  <div class="slide active" style="background-image: url('IMAGEN0.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN1.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN2.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN3.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN4.jpg');"></div>
+</div>
+
+<div class="countdown-container">
+  <h1>Nuestra propia primavera 🤎</h1>
+  <div class="countdown">
+    <div class="time-box">
+      <span class="number" id="days">0</span>
+      <span class="label">Días</span>
+    </div>
+    <div class="time-box">
+      <span class="number" id="hours">0</span>
+      <span class="label">Horas</span>
+    </div>
+    <div class="time-box">
+      <span class="number" id="minutes">0</span>
+      <span class="label">Minutos</span>
+    </div>
+    <div class="time-box">
+      <span class="number" id="seconds">0</span>
+      <span class="label">Segundos</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Countdown
+  const countdownDate = new Date("2025-09-20T09:00:00").getTime();
+  const updateCountdown = () => {
+    const now = new Date().getTime();
+    const distance = countdownDate - now;
+    if (distance < 0) {
+      document.querySelector(".countdown-container").innerHTML = "<h1>¡Llegó el momento!</h1>";
+      clearInterval(interval);
+      return;
+    }
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    document.getElementById("days").textContent = days;
+    document.getElementById("hours").textContent = hours;
+    document.getElementById("minutes").textContent = minutes;
+    document.getElementById("seconds").textContent = seconds;
+  };
+  const interval = setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // Slideshow
+  const slides = document.querySelectorAll('.background-slideshow .slide');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 5000);
+</script>
+
+</body>
+</html>
