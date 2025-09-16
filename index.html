@@ -3,73 +3,77 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>15/9 - Nuestros inicios</title>
+<title>Día 15/9</title>
 <style>
   body {
     margin: 0;
     font-family: 'Arial', sans-serif;
+    height: 100vh;
+    overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #fff;
-    text-align: center;
-    height: 100vh;
-    overflow: hidden;
+    background: #000;
   }
 
-  /* Fondo con zoom lento */
+  /* Fondo con foto */
   .background {
     position: fixed;
     top: 0; left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("Inicio.JPG"); /* 👈 cambia por el nombre de tu imagen */
+    background: url('Inicio.JPG') no-repeat center center;
     background-size: cover;
-    background-position: center;
-    animation: zoom 20s ease-in-out infinite alternate;
-    z-index: -2;
-  }
-
-  /* Overlay para oscurecer */
-  .overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.35);
+    filter: brightness(0.85);
     z-index: -1;
   }
 
-  @keyframes zoom {
-    from { transform: scale(1); }
-    to { transform: scale(1.1); }
+  /* Cartel inicial */
+  .overlay-start {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 1.6em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 1s ease-in-out;
   }
 
+  .overlay-start.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Caja de cuenta regresiva */
   .countdown-container {
+    position: absolute;
+    bottom: 20px; /* movida hacia abajo */
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: rgba(245, 222, 179, 0.2);
-    padding: 25px 35px;
-    border-radius: 25px;
+    background: rgba(245, 222, 179, 0.8);
+    padding: 20px 30px;
+    border-radius: 20px;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    z-index: 1;
+    text-align: center;
   }
 
-  .countdown-container h1 {
-    margin-bottom: 10px;
-    font-size: 1.8em;
-  }
-
-  .countdown-container h2 {
-    margin: 0;
-    font-size: 1.2em;
-    font-weight: normal;
+  h1 {
+    margin: 0 0 15px 0;
+    font-size: 1.4em;
+    color: #6B4C3B;
   }
 
   .countdown {
     display: flex;
     gap: 15px;
-    margin-top: 15px;
   }
 
   .time-box {
@@ -79,23 +83,27 @@
   }
 
   .number {
-    font-size: 2em;
+    font-size: 1.8em;
     font-weight: bold;
+    color: #8B6D5C;
   }
 
   .label {
-    font-size: 0.9em;
+    font-size: 0.8em;
+    text-transform: uppercase;
   }
 </style>
 </head>
 <body>
 
 <div class="background"></div>
-<div class="overlay"></div>
 
-<div class="countdown-container">
-  <h1>Tranquila, no pierdas la calma…</h1>
-  <h2>¿Y si nos retrotraemos a nuestros inicios?</h2>
+<div class="overlay-start" id="startOverlay">
+  Toca aquí para abrir el regalo 🎁
+</div>
+
+<div class="countdown-container" id="countdownContainer" style="display:none;">
+  <h1>¿Y si nos retrotraemos a nuestros inicios? 🤍</h1>
   <div class="countdown">
     <div class="time-box">
       <span class="number" id="days">0</span>
@@ -117,13 +125,25 @@
 </div>
 
 <script>
+  // Overlay
+  const overlay = document.getElementById("startOverlay");
+  const countdownContainer = document.getElementById("countdownContainer");
+
+  overlay.addEventListener("click", () => {
+    overlay.classList.add("hidden");
+    setTimeout(() => {
+      overlay.style.display = "none";
+      countdownContainer.style.display = "flex";
+    }, 1000);
+  });
+
   // Countdown
   const countdownDate = new Date("2025-09-20T09:30:00").getTime();
   const updateCountdown = () => {
     const now = new Date().getTime();
     const distance = countdownDate - now;
     if (distance < 0) {
-      document.querySelector(".countdown-container").innerHTML = "<h1>¡Llegó el momento!</h1>";
+      countdownContainer.innerHTML = "<h1>¡Llegó el momento! 💍</h1>";
       clearInterval(interval);
       return;
     }
