@@ -1,164 +1,198 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Día 15/9</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>16/9 - Un HTML pastel</title>
+
+<!-- Fuentes: Dancing Script para el mensaje, Inter para la UI -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
 <style>
-  body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #000;
+  :root{
+    --moca-1: #CBB79F; /* moca */
+    --moca-2: #E9D8C7; /* crema */
+    --accent:  #8B6D5C; /* café suave para texto */
+    --glass: rgba(255,255,255,0.65);
   }
 
-  /* Fondo con foto */
-  .background {
+  html,body{
+    height:100%;
+    margin:0;
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    background: linear-gradient(180deg, var(--moca-1) 0%, var(--moca-2) 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--accent);
+    overflow:hidden;
+  }
+
+  /* contenedor principal centrado (mensaje) */
+  .card {
+    width: min(920px, 94vw);
+    max-width: 920px;
+    margin: 20px;
+    padding: clamp(20px, 3.5vw, 40px);
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.62), rgba(255,255,255,0.55));
+    box-shadow: 0 8px 30px rgba(139,109,92,0.12);
+    backdrop-filter: blur(4px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    animation: fadeInUp 700ms cubic-bezier(.2,.9,.2,1);
+  }
+
+  .message {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.6rem, 3.4vw, 2.6rem);
+    line-height:1.05;
+    color: var(--accent);
+    margin: 0 0 12px 0;
+    letter-spacing: 0.2px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+    transform-origin: center;
+    animation: popIn 800ms cubic-bezier(.2,.9,.2,1);
+  }
+
+  .subtle {
+    font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+    color: rgba(139,109,92,0.85);
+    margin-bottom: 8px;
+    font-weight:500;
+  }
+
+  /* Cajita inferior: countdown (pegada al bottom para no tapar rostros) */
+  .countdown-wrapper {
+    width: 92%;
+    max-width: 760px;
     position: fixed;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('Inicio.JPG') no-repeat center center;
-    background-size: cover;
-    filter: brightness(0.85);
-    z-index: -1;
-  }
-
-  /* Cartel inicial */
-  .overlay-start {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-size: 1.6em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: opacity 1s ease-in-out;
-  }
-
-  .overlay-start.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Caja de cuenta regresiva */
-  .countdown-container {
-    position: absolute;
-    bottom: 20px; /* movida hacia abajo */
     left: 50%;
     transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(245, 222, 179, 0.8);
-    padding: 20px 30px;
-    border-radius: 20px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    text-align: center;
-  }
-
-  h1 {
-    margin: 0 0 15px 0;
-    font-size: 1.4em;
-    color: #6B4C3B;
+    bottom: 18px;
+    display:flex;
+    justify-content:center;
+    z-index: 30;
   }
 
   .countdown {
-    display: flex;
-    gap: 15px;
+    display:flex;
+    gap: 14px;
+    align-items:center;
+    justify-content:center;
+    background: var(--glass);
+    border-radius: 14px;
+    padding: 12px 18px;
+    box-shadow: 0 6px 18px rgba(139,109,92,0.12);
+    backdrop-filter: blur(6px);
   }
 
   .time-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width: 66px;
   }
 
   .number {
-    font-size: 1.8em;
-    font-weight: bold;
-    color: #8B6D5C;
+    font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+    font-weight:700;
+    color: var(--accent);
+    letter-spacing: 0.5px;
   }
 
   .label {
-    font-size: 0.8em;
-    text-transform: uppercase;
+    font-size: 0.72rem;
+    color: rgba(139,109,92,0.8);
+    text-transform:uppercase;
+    margin-top:4px;
+    font-weight:600;
+  }
+
+  /* pequeñas adaptaciones para móvil */
+  @media (max-width:420px){
+    .card{ padding:18px; border-radius:14px; }
+    .message{ font-size: 1.5rem; }
+    .countdown { gap:10px; padding:10px 12px; }
+  }
+
+  /* Animaciones */
+  @keyframes fadeInUp {
+    from { opacity:0; transform: translateY(10px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  @keyframes popIn {
+    0% { transform: scale(.98); opacity:0; }
+    60% { transform: scale(1.02); opacity:1; }
+    100% { transform: scale(1); }
   }
 </style>
 </head>
 <body>
 
-<div class="background"></div>
+  <main class="card" role="main" aria-live="polite">
+    <h1 class="message">Anoche oramos juntos 🤎, pero eso no quita que hoy también haya HTML nuevo ✨</h1>
+    <div class="subtle">Te quiero.</div>
+  </main>
 
-<div class="overlay-start" id="startOverlay">
-  Toca aquí para abrir el regalo 🎁
-</div>
-
-<div class="countdown-container" id="countdownContainer" style="display:none;">
-  <h1>¿Y si nos retrotraemos a nuestros inicios? 🤎</h1>
-  <div class="countdown">
-    <div class="time-box">
-      <span class="number" id="days">0</span>
-      <span class="label">Días</span>
-    </div>
-    <div class="time-box">
-      <span class="number" id="hours">0</span>
-      <span class="label">Horas</span>
-    </div>
-    <div class="time-box">
-      <span class="number" id="minutes">0</span>
-      <span class="label">Minutos</span>
-    </div>
-    <div class="time-box">
-      <span class="number" id="seconds">0</span>
-      <span class="label">Segundos</span>
+  <!-- Countdown en la parte inferior (siempre apuntando a la misma fecha) -->
+  <div class="countdown-wrapper" aria-hidden="false">
+    <div class="countdown" role="timer" aria-label="Cuenta regresiva">
+      <div class="time-box">
+        <div class="number" id="days">0</div>
+        <div class="label">Días</div>
+      </div>
+      <div class="time-box">
+        <div class="number" id="hours">0</div>
+        <div class="label">Horas</div>
+      </div>
+      <div class="time-box">
+        <div class="number" id="minutes">0</div>
+        <div class="label">Minutos</div>
+      </div>
+      <div class="time-box">
+        <div class="number" id="seconds">0</div>
+        <div class="label">Segundos</div>
+      </div>
     </div>
   </div>
-</div>
 
 <script>
-  // Overlay
-  const overlay = document.getElementById("startOverlay");
-  const countdownContainer = document.getElementById("countdownContainer");
-
-  overlay.addEventListener("click", () => {
-    overlay.classList.add("hidden");
-    setTimeout(() => {
-      overlay.style.display = "none";
-      countdownContainer.style.display = "flex";
-    }, 1000);
-  });
-
-  // Countdown
+  // Countdown objetivo
   const countdownDate = new Date("2025-09-20T09:30:00").getTime();
-  const updateCountdown = () => {
-    const now = new Date().getTime();
+
+  function updateCountdown() {
+    const now = Date.now();
     const distance = countdownDate - now;
-    if (distance < 0) {
-      countdownContainer.innerHTML = "<h1>¡Llegó el momento! 💍</h1>";
-      clearInterval(interval);
+
+    if (distance <= 0) {
+      // Mensaje final accesible
+      document.getElementById('days').textContent = 0;
+      document.getElementById('hours').textContent = 0;
+      document.getElementById('minutes').textContent = 0;
+      document.getElementById('seconds').textContent = 0;
+      // Si querés reemplazar por algo al llegar, podés hacerlo aquí.
       return;
     }
+
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    document.getElementById("days").textContent = days;
-    document.getElementById("hours").textContent = hours;
-    document.getElementById("minutes").textContent = minutes;
-    document.getElementById("seconds").textContent = seconds;
-  };
-  const interval = setInterval(updateCountdown, 1000);
-  updateCountdown();
-</script>
 
+    document.getElementById('days').textContent = days;
+    document.getElementById('hours').textContent = hours;
+    document.getElementById('minutes').textContent = minutes;
+    document.getElementById('seconds').textContent = seconds;
+  }
+
+  // iniciar y actualizar cada segundo
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
 </body>
 </html>
