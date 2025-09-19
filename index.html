@@ -1,188 +1,148 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>16/9 - Un HTML pastel</title>
-
-<!-- Fuente única: Inter -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Slideshow Justificado</title>
 <style>
-  :root{
-    --moca-1: #CBB79F; /* moca */
-    --moca-2: #E9D8C7; /* crema */
-    --accent:  #8B6D5C; /* café suave para texto */
-    --glass: rgba(255,255,255,0.65);
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6B4C3B;
+    text-align: center;
+    height: 100vh;
+    overflow: hidden;
   }
 
-  html,body{
-    height:100%;
-    margin:0;
-    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    background: linear-gradient(180deg, var(--moca-1) 0%, var(--moca-2) 100%);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:var(--accent);
-    overflow:hidden;
-  }
-
-  .card {
-    width: min(920px, 94vw);
-    margin: 20px;
-    padding: clamp(20px, 3.5vw, 40px);
-    border-radius: 18px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.62), rgba(255,255,255,0.55));
-    box-shadow: 0 8px 30px rgba(139,109,92,0.12);
-    backdrop-filter: blur(4px);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-    animation: fadeInUp 700ms cubic-bezier(.2,.9,.2,1);
-  }
-
-  .message {
-    font-family: 'Inter', sans-serif;
-    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
-    font-weight: 600;
-    line-height:1.3;
-    color: var(--accent);
-    margin: 0 0 12px 0;
-    letter-spacing: 0.2px;
-    transform-origin: center;
-    animation: popIn 800ms cubic-bezier(.2,.9,.2,1);
-  }
-
-  .subtle {
-    font-size: clamp(0.9rem, 1.5vw, 1.05rem);
-    color: rgba(139,109,92,0.85);
-    margin-bottom: 8px;
-    font-weight:500;
-  }
-
-  .countdown-wrapper {
-    width: 92%;
-    max-width: 760px;
+  .background-slideshow {
     position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 18px;
-    display:flex;
-    justify-content:center;
-    z-index: 30;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+  }
+
+  .background-slideshow .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;       /* llena todo el contenedor */
+    background-position: center;  /* centra la imagen */
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+  }
+
+  .background-slideshow .slide.active {
+    opacity: 0.6; /* transparencia */
+  }
+
+  .countdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(245, 222, 179, 0.2);
+    padding: 25px 35px;
+    border-radius: 25px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    z-index: 1;
   }
 
   .countdown {
-    display:flex;
-    gap: 14px;
-    align-items:center;
-    justify-content:center;
-    background: var(--glass);
-    border-radius: 14px;
-    padding: 12px 18px;
-    box-shadow: 0 6px 18px rgba(139,109,92,0.12);
-    backdrop-filter: blur(6px);
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
   }
 
   .time-box {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    min-width: 66px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .number {
-    font-size: clamp(1.2rem, 2.4vw, 1.6rem);
-    font-weight:700;
-    color: var(--accent);
-    letter-spacing: 0.5px;
+    font-size: 2em;
+    font-weight: bold;
   }
 
   .label {
-    font-size: 0.72rem;
-    color: rgba(139,109,92,0.8);
-    text-transform:uppercase;
-    margin-top:4px;
-    font-weight:600;
-  }
-
-  @media (max-width:420px){
-    .card{ padding:18px; border-radius:14px; }
-    .message{ font-size: 1.3rem; }
-    .countdown { gap:10px; padding:10px 12px; }
-  }
-
-  @keyframes fadeInUp {
-    from { opacity:0; transform: translateY(10px); }
-    to   { opacity:1; transform: translateY(0); }
-  }
-  @keyframes popIn {
-    0% { transform: scale(.98); opacity:0; }
-    60% { transform: scale(1.02); opacity:1; }
-    100% { transform: scale(1); }
+    font-size: 0.9em;
   }
 </style>
 </head>
 <body>
 
-  <main class="card" role="main" aria-live="polite">
-    <h1 class="message">Anoche oramos juntos 🤎, pero eso no quita que hoy también haya HTML nuevo ✨</h1>
-    <div class="subtle">Pequeños gestos. Grandes días.</div>
-  </main>
+<div class="background-slideshow">
+  <div class="slide active" style="background-image: url('IMAGEN0.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN1.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN2.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN3.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN4.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN5.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN6.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN7.jpg');"></div>
+  <div class="slide" style="background-image: url('IMAGEN8.jpg');"></div>
+</div>
 
-  <div class="countdown-wrapper" aria-hidden="false">
-    <div class="countdown" role="timer" aria-label="Cuenta regresiva">
-      <div class="time-box">
-        <div class="number" id="days">0</div>
-        <div class="label">Días</div>
-      </div>
-      <div class="time-box">
-        <div class="number" id="hours">0</div>
-        <div class="label">Horas</div>
-      </div>
-      <div class="time-box">
-        <div class="number" id="minutes">0</div>
-        <div class="label">Minutos</div>
-      </div>
-      <div class="time-box">
-        <div class="number" id="seconds">0</div>
-        <div class="label">Segundos</div>
-      </div>
+<div class="countdown-container">
+  <h1>Recta final, la espera se termina ✨</h1>
+  <h2>Aguantamos unas horitas más??? 🤎</h2>
+  <div class="countdown">
+    <div class="time-box">
+      <span class="number" id="days">0</span>
+      <span class="label">Días</span>
+    </div>
+    <div class="time-box">
+      <span class="number" id="hours">0</span>
+      <span class="label">Horas</span>
+    </div>
+    <div class="time-box">
+      <span class="number" id="minutes">0</span>
+      <span class="label">Minutos</span>
+    </div>
+    <div class="time-box">
+      <span class="number" id="seconds">0</span>
+      <span class="label">Segundos</span>
     </div>
   </div>
+</div>
 
 <script>
-  const countdownDate = new Date("2025-09-20T09:30:00").getTime();
-
-  function updateCountdown() {
-    const now = Date.now();
+  // Countdown
+  const countdownDate = new Date("2025-09-20T09:00:00").getTime();
+  const updateCountdown = () => {
+    const now = new Date().getTime();
     const distance = countdownDate - now;
-
-    if (distance <= 0) {
-      document.getElementById('days').textContent = 0;
-      document.getElementById('hours').textContent = 0;
-      document.getElementById('minutes').textContent = 0;
-      document.getElementById('seconds').textContent = 0;
+    if (distance < 0) {
+      document.querySelector(".countdown-container").innerHTML = "<h1>¡Llegó el momento!</h1>";
+      clearInterval(interval);
       return;
     }
-
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById('days').textContent = days;
-    document.getElementById('hours').textContent = hours;
-    document.getElementById('minutes').textContent = minutes;
-    document.getElementById('seconds').textContent = seconds;
-  }
-
+    document.getElementById("days").textContent = days;
+    document.getElementById("hours").textContent = hours;
+    document.getElementById("minutes").textContent = minutes;
+    document.getElementById("seconds").textContent = seconds;
+  };
+  const interval = setInterval(updateCountdown, 1000);
   updateCountdown();
-  setInterval(updateCountdown, 1000);
+
+  // Slideshow
+  const slides = document.querySelectorAll('.background-slideshow .slide');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 5000);
 </script>
+
 </body>
 </html>
